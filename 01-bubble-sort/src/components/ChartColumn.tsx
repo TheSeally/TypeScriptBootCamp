@@ -1,7 +1,7 @@
 import React from 'react';
-import { IColumn } from './App';
+import { ChartColumnProps } from './App';
 
-export function ChartColumn({ height }:  IColumn): JSX.Element {
+export function ChartColumn({ height }:  ChartColumnProps): React.ReactElement {
     return (
         <div className="chart__column" style={{ height }}></div>
     );

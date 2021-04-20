@@ -8,11 +8,17 @@ import { MIN_SIZE, DEFAULT_SIZE, SORT_SPEED, SortStatuses } from '../constants';
 import { SortingService } from '../services/sortingservice';
 import { generateRandomData } from '../services/datagenerator';
 
-export interface IColumn {
+export interface ChartColumnProps {
   height: number,
 }
 
-export default class App extends React.Component<{}, { size: number, data: number[], status: string }> {
+interface AppState {
+  size: number,
+  data: number[],
+  status: string,
+}
+
+export default class App extends React.Component<{}, AppState> {
   state = {
     size: DEFAULT_SIZE,
     data: generateRandomData(DEFAULT_SIZE),
@@ -51,7 +57,7 @@ export default class App extends React.Component<{}, { size: number, data: numbe
     this.setState({ status: SortStatuses.paused })
   };
 
-  render(): JSX.Element {
+  render(): React.ReactNode {
     return (
       <main className="container">
         <div className="container__title">Bubble sorting</div>
