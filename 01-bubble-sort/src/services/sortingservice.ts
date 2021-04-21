@@ -1,47 +1,50 @@
+type sortingGenerator = IterableIterator<number[]>
+
 export class SortingService {
-    private index: number = 0;
-    private lastSortedElem: number = this.data.length - 1;
-    private isChanged: boolean = false;
+    private iterationCount: number = 0;
     private isCompleted: boolean = false;
+    private generator: sortingGenerator;
 
-    constructor(private data: number[]) { }
-
-    private updateSortingProgress(): void {
-        this.index = 0;
-        this.isChanged = false;
-        this.lastSortedElem -= 1;
+    constructor(private data: number[]) {
+        this.generator = this.setDataSequence();
     }
 
-    isSortingComplete(): boolean {
+    public isSortingComplete(): boolean {
         return this.isCompleted;
     }
 
-    step(): number[] {
-        const isIterationComplete = this.index > this.lastSortedElem || this.index > this.data.length;
-        const shouldStartNewIteration = isIterationComplete && this.isChanged
+    private *setDataSequence(): sortingGenerator {
+        const iterationSize = this.data.length - this.iterationCount;
+        let isChanged = false;
 
-        this.isCompleted = isIterationComplete && !this.isChanged;
+        for (let index = 0; index < iterationSize; index++) {
+            const leftElem = this.data[index];
+            const rightElem = this.data[index + 1];
 
-        if (this.isCompleted) {
-            return this.data;
+            if (rightElem < leftElem) {
+                this.data[index] = rightElem;
+                this.data[index + 1] = leftElem;
+
+                isChanged = true;
+            }
+
+            yield this.data;
         }
 
-        if (shouldStartNewIteration) {
-            this.updateSortingProgress();
+        this.iterationCount += 1
+
+        if (isChanged) {
+            yield* this.setDataSequence();
         }
-
-        const leftElem = this.data[this.index];
-        const rightElem = this.data[this.index + 1];
-
-        if (rightElem < leftElem) {
-            this.data[this.index] = rightElem;
-            this.data[this.index + 1] = leftElem;
-
-            this.isChanged = true;
-        }
-
-        this.index += 1;
 
         return this.data;
+    }
+
+    public step(): number[] {
+        const nextIteration = this.generator.next();
+
+        this.isCompleted = nextIteration.done ?? false;
+
+        return nextIteration.value ?? this.data;
     }
 }
