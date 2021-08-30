@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+  height: 75vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container__item {
+  margin-top: 20px;
+}
+
+.chart {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.chart__column {
+  width: 10px;
+  border: 1px solid lemonchiffon;
+  background-color: lightseagreen;
+}
+
+.chart__column + .chart__column {
+  margin-left: 1px;
+}
+
+.controller {
+  display: flex;
+}
+
+.controller__item + .controller__item {
+  margin-left: 20px;
+}
+
+.controller__input {
+  width: 30px;
+  text-align: center;
+}
